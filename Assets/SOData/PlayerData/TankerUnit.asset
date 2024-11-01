@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf45c746369199f46b8c9bbe619bae54, type: 3}
+  m_Name: TankerUnit
+  m_EditorClassIdentifier: 
+  unitType: 1
+  UnitName: TankerUnit
+  UsedCost: 100
+  UnitDamage: 12
+  MaxHp: 75
+  AttackDelay: 1
+  MoveSpeed: 1
+  AttackRadius: 4
+  SpawnCoolTime: 9
+  UnitProjectile: {fileID: 328351910306364731, guid: 22fb937684354734dada39c3063a6951, type: 3}
