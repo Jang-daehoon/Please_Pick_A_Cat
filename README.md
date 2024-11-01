@@ -3,15 +3,15 @@
 <div align="center"><h1># ConsoleGame_Trickcal_Butter_Rising</h1></div>
 <div align="center"><h2>2024-10-29 ~ 2024-11-01</h2></div>
 <div align="center">다른 분의 기획문서를 보고 그대로 작성했습니다.</div>
-<div align="center"><img src="https://img.shields.io/badge/C++-00599C?style=flat&logo=cplusplus&logoColor=white">을 활용해 개발하였습니다.</div>
+<div align="center"><img src="https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white"/>을 활용해 개발하였습니다.</div>
 <div align="center">기획에 해당되는 기능 및 UI등을 그대로 구현했습닌다.</div>
 <div align="center">구현하면서 기획에 해당하는 내용 중 기본적인 구현에 해당하는 내용이 빠져있습니다.</div>
 <div align="center">구현하면서 가장 많이 느낀 것이 누락된 내용이 많습니다.</div>
 
 <div align="center"> <h1>Tech Stack</h1>
 <h3>Platforms & Language</h3>
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
-<img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white"/>
+<img src="https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white"/>
+<img src="https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white"/>
 <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"/>
 <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
 <img src="https://img.shields.io/badge/Visual_Studio-5C2D91?style=for-the-badge&logo=visual%20studio&logoColor=white"/>
