@@ -1,6 +1,6 @@
 # Please_Pick_A_Cat
 기획자의 개발문서를 보고 그대로 개발한 게임입니다. 기획서 그대로 만들었기에 부족한 점이 많습니다.
-<div align="center"><h1># ConsoleGame_Trickcal_Butter_Rising</h1></div>
+<div align="center"><h1># Please_Pick_A_Cat</h1></div>
 <div align="center"><h2>2024-10-29 ~ 2024-11-01</h2></div>
 <div align="center">다른 분의 기획문서를 보고 그대로 작성했습니다.</div>
 <div align="center"><img src="https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white"/>을 활용해 개발하였습니다.</div>
