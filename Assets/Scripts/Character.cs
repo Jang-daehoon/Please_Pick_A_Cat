@@ -125,15 +125,18 @@ public class Character : MonoBehaviour
         if (target != null && target.CompareTag("Enemy"))
         {
             EnemyUnit enemy = target.GetComponent<EnemyUnit>(); // 적의 스크립트 참조
+            
             if (enemy != null)
             {
+                enemy.TakeDamage(damage);
+                Debug.Log(CharacterName + "가 " + enemy.name + "에게 " + damage + "의 피해를 입혔습니다.");
+
                 if (enemy.curHp <= 0)
                 {
                     // 리스트에서 제거
                     Targets.Remove(enemy.gameObject);
+                    enemy.curHp = 0;
                 }
-                enemy.TakeDamage(damage);
-                Debug.Log(CharacterName + "가 " + enemy.name + "에게 " + damage + "의 피해를 입혔습니다.");
             }
         }
         else if(target != null && target.CompareTag("EnemyTower"))
@@ -153,7 +156,7 @@ public class Character : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (curHp > 0 && !isDead)
+        if (curHp > 0)
         {
             animator.SetTrigger("Hit");
             curHp -= damage;
@@ -164,19 +167,19 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void Dead()
+    public virtual void Dead()
     {
         isDead = true;
-        curHp -= maxHp;
 
         if (curHp < 0)
         {
             curHp = 0;
         }
+        Targets.Clear();
         gameObject.tag = "Untagged";
         gameObject.layer = 0;
         GameObject AcensionObj = Instantiate(GameManager.Instance.AcensionPrefab, transform.position, transform.rotation, null);
-        animator.SetTrigger("Dead");
+        animator.SetBool("Dead", isDead);
         Destroy(gameObject, 0.5f);
         // 사망 애니메이션 실행
     }

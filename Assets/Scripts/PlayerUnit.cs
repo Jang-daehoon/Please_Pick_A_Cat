@@ -20,7 +20,28 @@ public class PlayerUnit : Character
         attackRadius = playerUnitSo.AttackRadius;
         spawnCoolTime = playerUnitSo.SpawnCoolTime;
 
+        isDead = false;
         curHp = maxHp;
+        gameObject.tag = "Player";
+        animator.SetBool("Dead", isDead);
+        gameObject.layer = 3;
+
+    }
+    public override void Dead()
+    {
+        isDead = true;
+
+        if (curHp < 0)
+        {
+            curHp = 0;
+        }
+        gameObject.tag = "Untagged";
+        gameObject.layer = 0;
+        GameObject AcensionObj = Instantiate(GameManager.Instance.AcensionPrefab, transform.position, transform.rotation, null);
+        animator.SetTrigger("Dead");
+        //PlayerUnitPool.pool.Push(this, 0.5f); //오브젝트풀링
+        Destroy(gameObject, 0.5f);
+
     }
     private void OnDrawGizmos()
     {

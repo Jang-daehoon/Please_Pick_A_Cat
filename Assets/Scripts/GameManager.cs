@@ -262,7 +262,13 @@ public class GameManager : MonoBehaviour
         if (curCost > playerUnits[0].UsedCost)
         {
             curCost -= playerUnits[0].UsedCost;
-            GameObject newCommonUnit = Instantiate(playerUnits[0].UnitProjectile, spawnPos.position, transform.rotation, null);
+
+            //오브젝트 풀링
+            /*PlayerUnit commonCat = PlayerUnitPool.pool.Pop();
+            commonCat.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.*/
+            
+            GameObject newCommonUnit = Instantiate(playerUnits[0].UnitProjectile, spawnPos.position, transform.rotation, null); //일반소환
+
             Vector2 CommonVfxPos = new Vector2(newCommonUnit.transform.position.x-1f, newCommonUnit.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation,null);
             Destroy(newSpawnParticle, 2f);

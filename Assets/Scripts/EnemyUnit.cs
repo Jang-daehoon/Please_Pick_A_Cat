@@ -21,7 +21,7 @@ public class EnemyUnit : Character
         attackRadius = enemyUnitSO.attackRadius;
         spawnCoolTime = enemyUnitSO.spawnCoolTime;
 
-        curHp = maxHp;
+        curHp = enemyUnitSO.maxHp;
     }
     private void OnDrawGizmos()
     {
@@ -76,13 +76,16 @@ public class EnemyUnit : Character
             PlayerUnit playerUnit = target.GetComponent<PlayerUnit>(); // 적의 스크립트 참조
             if (playerUnit != null)
             {
+                playerUnit.TakeDamage(damage);
+                Debug.Log(CharacterName + "가 " + playerUnit.name + "에게 " + damage + "의 피해를 입혔습니다.");
+                
                 if (playerUnit.curHp <= 0)
                 {
                     // 리스트에서 제거
                     Targets.Remove(playerUnit.gameObject);
+                    playerUnit.curHp = 0;
                 }
-                playerUnit.TakeDamage(damage);
-                Debug.Log(CharacterName + "가 " + playerUnit.name + "에게 " + damage + "의 피해를 입혔습니다.");
+
             }
         }
         else if(target != null && target.CompareTag("PlayerTower"))
