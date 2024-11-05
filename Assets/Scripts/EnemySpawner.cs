@@ -7,6 +7,13 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyUnitSO[] enemyUnitSo;
     [SerializeField] private Transform spawnPos;
 
+    public float[] incrementInterval; // Cost 증가 간격
+    public float selectIncrementInterval;   // 선택한 난이도에 따른 Cost 증가
+    private float timer;
+
+    [SerializeField] private int curCost;
+    [SerializeField] private int[] levelMaxCost; // 0 = Easy, 1 = Normal, 2 = Hard
+    [SerializeField] private int selectMaxCost;
     float enemyCommonTimer;
     [SerializeField] private float enemyCommonInterval;
 
@@ -18,52 +25,141 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("유닛 소환 파티클")]
     [SerializeField, Tooltip("Common Enemy 소환 파티클")] private GameObject commonSpawnVfx;
-    [SerializeField, Tooltip("Elite Ememy 소환 파티클")] private GameObject tankerSpawnVfx;
-    [SerializeField, Tooltip("Boss Enemy 소환 파티클")] private GameObject meleeSpawnVfx;
-    private void Start()
+    [SerializeField, Tooltip("Elite Enemy 소환 파티클")] private GameObject eliteSpawnVfx;
+    [SerializeField, Tooltip("Boss Enemy 소환 파티클")] private GameObject bossSpawnVfx;
+
+
+    private void OnEnable()
     {
-        //일반 유닛 바로 소환
-        Instantiate(enemyUnitSo[0].unitProjectile, spawnPos.position, transform.rotation, null);
+        enemyCommonTimer = 0;
+        enemyEliteTimer = 0;
+        enemyBossTimer = 0;
+        curCost = 0;
+
+        if (GameManager.Instance.isLevelEasy)
+        {
+            selectMaxCost = levelMaxCost[0];
+            selectIncrementInterval = incrementInterval[0];
+        }
+        else if (GameManager.Instance.isLevelNomal)
+        {
+            selectMaxCost = levelMaxCost[1];
+            selectIncrementInterval = incrementInterval[1];
+        }
+        else if (GameManager.Instance.isLevelHard)
+        {
+            selectMaxCost = levelMaxCost[2];
+            selectIncrementInterval = incrementInterval[2];
+        }
     }
-    // Update is called once per frame
+
     void Update()
     {
-        enemyCommonTimer +=Time.deltaTime;
-        enemyEliteTimer+=Time.deltaTime;
-        //보스조건은 tower curHp가 50%이하면 20초에 1마리씩 소환
-        enemyBossTimer+=Time.deltaTime;
+        timer += Time.deltaTime;
 
-        if(enemyCommonTimer >= enemyCommonInterval)
+        // 비용 증가
+        if (timer >= selectIncrementInterval && curCost < selectMaxCost)
         {
-            //적 일반유닛 소환
-            Debug.Log("적 일반유닛 소환");
-            enemyCommonTimer = 0;
-            Instantiate(enemyUnitSo[0].unitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 CommonVfxPos = new Vector2(spawnPos.transform.position.x - 1f, spawnPos.transform.position.y + 2f);
-            GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation, null);
-            Destroy(newSpawnParticle, 2f);
+            curCost++;
         }
-        if(GameManager.Instance.playeTime >= 60 && enemyEliteTimer >= enemyEliteInterval)
-        {
-            Debug.Log("중간 유닛 소환");
-            enemyEliteTimer = 0;
-            //중간 유닛 소환
-            Instantiate(enemyUnitSo[1].unitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 EliteVfxPos = new Vector2(spawnPos.transform.position.x - 1f, spawnPos.transform.position.y + 2f);
-            GameObject newSpawnParticle = Instantiate(commonSpawnVfx, EliteVfxPos, transform.rotation, null);
-            Destroy(newSpawnParticle, 2f);
-        }
-        if(GameManager.Instance.enemyTowerCurHp<=500 && enemyBossTimer >= enemyBossInterval)
-        {
-            Debug.Log("Boss유닛 소환");
-            enemyBossTimer = 0;
-            //Boss유닛 소환
-            Instantiate(enemyUnitSo[2].unitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 BossVfxPos = new Vector2(spawnPos.transform.position.x - 1f, spawnPos.transform.position.y + 2f);
-            GameObject newSpawnParticle = Instantiate(commonSpawnVfx, BossVfxPos, transform.rotation, null);
-            Destroy(newSpawnParticle, 2f);
-        }
-        
 
+        enemyCommonTimer += Time.deltaTime;
+        enemyEliteTimer += Time.deltaTime;
+        enemyBossTimer += Time.deltaTime;
+
+        // Easy 난이도에서는 주로 Common을 소환하고, 30% 확률로 Elite를 소환
+        if (GameManager.Instance.isLevelEasy)
+        {
+            if (curCost >= enemyUnitSo[0].usedCost && enemyCommonTimer >= enemyCommonInterval)  // 소환하려는 유닛의 usedCost가 curCost보다 작거나 같으면 소환
+            {
+                enemyCommonTimer = 0;
+                SpawnCommonUnit();
+            }
+            else if (enemyEliteTimer >= enemyEliteInterval)
+            {
+                if (Random.Range(0f, 1f) < 0.2f && curCost >= enemyUnitSo[1].usedCost) // 20% 확률로 Elite 소환
+                {
+                    enemyEliteTimer = 0;
+                    SpawnEliteUnit();
+                }
+            }
+        }
+
+        // Normal 난이도에서는 Common과 Elite를 섞어서 소환하고, 낮은 확률로 Boss를 소환
+        if (GameManager.Instance.isLevelNomal)
+        {
+            if (curCost >= enemyUnitSo[0].usedCost && enemyCommonTimer >= enemyCommonInterval) // Common 유닛 소환
+            {
+                enemyCommonTimer = 0;
+                SpawnCommonUnit();
+            }
+            else if (enemyEliteTimer >= enemyEliteInterval)
+            {
+                if (curCost >= enemyUnitSo[1].usedCost) // Elite 유닛 소환
+                {
+                    enemyEliteTimer = 0;
+                    SpawnEliteUnit();
+                }
+            }
+            else if (enemyBossTimer >= enemyBossInterval)
+            {
+                if (Random.Range(0f, 1f) < 0.2f && curCost >= enemyUnitSo[2].usedCost) // 20% 확률로 Boss 소환
+                {
+                    enemyBossTimer = 0;
+                    SpawnBossUnit();
+                }
+            }
+        }
+
+        // Hard 난이도에서는 Cost가 충분히 쌓이면 즉시 Boss를 소환
+        if (GameManager.Instance.isLevelHard)
+        {
+            if (curCost >= enemyUnitSo[2].usedCost && enemyBossTimer >= enemyBossInterval)
+            {
+                SpawnBossUnit();
+                enemyBossTimer = 0; // Boss 소환 후 Boss 타이머 리셋
+            }
+            else if (curCost >= enemyUnitSo[0].usedCost && enemyCommonTimer >= enemyCommonInterval)
+            {
+                enemyCommonTimer = 0;
+                SpawnCommonUnit();
+            }
+            else if (curCost >= enemyUnitSo[1].usedCost && enemyEliteTimer >= enemyEliteInterval)
+            {
+                enemyEliteTimer = 0;
+                SpawnEliteUnit();
+            }
+        }
+    }
+
+
+    private void SpawnCommonUnit()
+    {
+        Instantiate(enemyUnitSo[0].unitProjectile, spawnPos.position, transform.rotation, null);
+        Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
+        GameObject newSpawnParticle = Instantiate(commonSpawnVfx, spawnVfxPos, transform.rotation, null);
+        Destroy(newSpawnParticle, 2f);
+
+        curCost -= Mathf.RoundToInt(enemyUnitSo[0].usedCost);  // 유닛 소환 후 비용 차감
+    }
+
+    private void SpawnEliteUnit()
+    {
+        Instantiate(enemyUnitSo[1].unitProjectile, spawnPos.position, transform.rotation, null);
+        Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
+        GameObject newSpawnParticle = Instantiate(eliteSpawnVfx, spawnVfxPos, transform.rotation, null);
+        Destroy(newSpawnParticle, 2f);
+
+        curCost -= Mathf.RoundToInt(enemyUnitSo[1].usedCost);  // 유닛 소환 후 비용 차감
+    }
+
+    private void SpawnBossUnit()
+    {
+        Instantiate(enemyUnitSo[2].unitProjectile, spawnPos.position, transform.rotation, null);
+        Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
+        GameObject newSpawnParticle = Instantiate(bossSpawnVfx, spawnVfxPos, transform.rotation, null);
+        Destroy(newSpawnParticle, 2f);
+
+        curCost -= Mathf.RoundToInt(enemyUnitSo[2].usedCost);  // 유닛 소환 후 비용 차감
     }
 }

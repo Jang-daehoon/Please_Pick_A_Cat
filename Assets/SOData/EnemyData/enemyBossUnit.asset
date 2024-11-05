@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: enemyBossUnit
   m_EditorClassIdentifier: 
   unitName: enemyBossUnit
-  unitDamage: 25
-  maxHp: 70
-  attackDelay: 1
-  moveSpeed: 1
+  unitDamage: 40
+  maxHp: 100
+  attackDelay: 0.75
+  moveSpeed: 5
   spawnCoolTime: 20
-  attackRadius: 4
+  attackRadius: 6
+  usedCost: 200
   unitProjectile: {fileID: 7511845003413620687, guid: 81264a90314f0e14b9467883bd5c77ed, type: 3}

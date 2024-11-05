@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 2
   UnitName: MeleeUnit
-  UsedCost: 200
-  UnitDamage: 20
-  MaxHp: 70
-  AttackDelay: 1
-  MoveSpeed: 1
-  AttackRadius: 4
-  SpawnCoolTime: 10
+  UsedCost: 150
+  UnitDamage: 8
+  MaxHp: 80
+  AttackDelay: 0.5
+  MoveSpeed: 4
+  AttackRadius: 5
+  SpawnCoolTime: 7
   UnitProjectile: {fileID: 328351910306364731, guid: a0ba75c7e1050dc4aa128a2923d6b76d, type: 3}

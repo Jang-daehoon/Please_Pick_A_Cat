@@ -8,10 +8,11 @@ public class EnemyUnitSO : ScriptableObject
     public string unitName;
     public float unitDamage;
     public float maxHp;
-    public int attackDelay;
+    public float attackDelay;
     public float moveSpeed;
     public float spawnCoolTime;
     public float attackRadius;
+    public float usedCost;  //소모되는 Cost
 
     public GameObject unitProjectile;
 }

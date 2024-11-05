@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,6 +55,17 @@ public class GameManager : MonoBehaviour
     [SerializeField]private float LaserCoolTime = 48;
     [SerializeField]private float LaserCurTime = 0;
     private bool isReloading = false; // 코루틴 실행 중인지 확인하는 변수
+    public GameObject GameSet;
+
+    [Header("GameLevelSelect")]
+    public bool isLevelEasy;
+    public bool isLevelNomal;
+    public bool isLevelHard;
+
+    [Header("GameLevelData")]
+    public bool isEasyClear = false;
+    public bool isNomalClear = false;
+    public bool isHardClear = false;
 
     [Header("PlayerCastleData")]
     public float playerTowerMaxHp;
@@ -77,11 +89,16 @@ public class GameManager : MonoBehaviour
     public bool isDefeat;  //패배
     public bool isVictory; //승리
 
+    [Header("ObjectCleaner")]
+    public GameObject CharacterCleaner;
+
     private void Awake()
     {
         Instance = this;
         LaserCoolTime = 48;
         isReloadingDone = false;
+        GameSet.SetActive(false);
+
         //기본 Cost
         maxCost = 150;
 
@@ -101,11 +118,6 @@ public class GameManager : MonoBehaviour
         laserFireBtn.onClick.AddListener(LaserFire);
         
     }
-    private void OnEnable()
-    {
-        playerTowerCurHp = playerTowerMaxHp;
-        enemyTowerCurHp = enemyTowerMaxHp;
-    }
     // Start is called before the first frame update
     void Start()
     {
@@ -114,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(isReloading == false)
+        if (isReloading == false)
         {
             StartCoroutine(ReloadingLaser());
         }
@@ -135,18 +147,24 @@ public class GameManager : MonoBehaviour
             timer = 0f; // 타이머 리셋
             //Debug.Log($"CurCost: {curCost}"); // 현재 비용을 출력
         }
-        if (isVictory == true)
+        if (isVictory == true && isDefeat == false)
         {
-            Time.timeScale = 0;
+            CharacterCleaner.SetActive(true);
             UiManager.Instance.VictoryUiSet();
+            Invoke("TimeStop", 0.2f);
 
         }
-        else if (isDefeat == true)
+        else if (isDefeat == true && isVictory == false)
         {
-            Time.timeScale = 0;
+            CharacterCleaner.SetActive(true);
             UiManager.Instance.DefeatUISet();
+            Invoke("TimeStop", 0.2f);
         }
-
+        else if(isVictory == false && isDefeat == false)
+        {
+            Time.timeScale = 1;
+        }
+        
         //키보드 소환 및 상호작용
         if (Input.GetKeyDown(KeyCode.Alpha1) && commUnitReady == true)
         {
@@ -172,8 +190,41 @@ public class GameManager : MonoBehaviour
         {
             LaserFire();
         }
+        else if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            UiManager.Instance.OptionUISet();
+        }
     }
+    private void TimeStop()
+    {
+        Time.timeScale = 0;
+    }
+    public void GameStartInit()
+    {
+        //게임 시작 시 초기화
+        CharacterCleaner.SetActive(false);
+        isVictory = false;
+        isDefeat = false;
+        isReloadingDone = false;
+        isReloading = false;
+        Time.timeScale = 1;
 
+        playerTowerCurHp = playerTowerMaxHp;
+        enemyTowerCurHp = enemyTowerMaxHp;
+        curCost = 0;
+        maxCost = 150;
+        CurLevel = 0;
+        playeTime = 0;
+        LaserCurTime = 0;
+
+        //소환 버튼 초기화
+        commUnitReady = true;
+        tankerUnitReady = true;
+        meleeUnitReady = true;
+        rangeUnitReady = true;
+
+        UiManager.Instance.ReloadingDoneParticle.Stop();
+    }
     public IEnumerator ButtonCooltime(Button button, GameObject coolObj, Image coolTimeBar, float coolTime)
     {
         button.interactable = false; // 버튼 비활성화

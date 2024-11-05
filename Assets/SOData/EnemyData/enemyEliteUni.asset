@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: enemyEliteUni
   m_EditorClassIdentifier: 
   unitName: enemyEliteUni
-  unitDamage: 23
-  maxHp: 70
-  attackDelay: 1
-  moveSpeed: 1
+  unitDamage: 25
+  maxHp: 80
+  attackDelay: 0.8
+  moveSpeed: 4.25
   spawnCoolTime: 10
-  attackRadius: 4
+  attackRadius: 5
+  usedCost: 120
   unitProjectile: {fileID: 7511845003413620687, guid: c64759dbdb76d5047857f2e046fb5158, type: 3}

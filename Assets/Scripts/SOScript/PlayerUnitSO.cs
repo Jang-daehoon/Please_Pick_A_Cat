@@ -13,7 +13,7 @@ public class PlayerUnitSO : ScriptableObject
     public int UsedCost;
     public float UnitDamage;
     public float MaxHp;
-    public int AttackDelay;
+    public float AttackDelay;
     public float MoveSpeed;
     public float AttackRadius;
     public float SpawnCoolTime;

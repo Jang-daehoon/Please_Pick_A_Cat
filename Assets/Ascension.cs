@@ -5,17 +5,27 @@ using UnityEngine;
 public class Ascension : MonoBehaviour
 {
     public float Speed;
+    public bool isCleanerConnet;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if(collision.CompareTag("GameCleaner"))
+        {
+            isCleanerConnet = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector2.up * Speed * Time.deltaTime);
-        Destroy(gameObject, 3f);
+        if(isCleanerConnet == false)
+        {
+            transform.Translate(Vector2.up * Speed * Time.deltaTime);
+            Destroy(gameObject, 1f);
+        }
+        else if(isCleanerConnet == true)
+        {
+            Destroy(gameObject);
+        }
     }
 }

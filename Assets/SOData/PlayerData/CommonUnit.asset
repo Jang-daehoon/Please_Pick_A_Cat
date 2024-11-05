@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 0
   UnitName: CommonUnit
-  UsedCost: 100
+  UsedCost: 80
   UnitDamage: 12
   MaxHp: 50
   AttackDelay: 1
-  MoveSpeed: 1
+  MoveSpeed: 3
   AttackRadius: 4
-  SpawnCoolTime: 5
+  SpawnCoolTime: 3
   UnitProjectile: {fileID: 328351910306364731, guid: 839288f5e44a5ff49bfbfe78760dc176, type: 3}

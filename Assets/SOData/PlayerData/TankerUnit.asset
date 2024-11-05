@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 1
   UnitName: TankerUnit
-  UsedCost: 100
-  UnitDamage: 12
+  UsedCost: 90
+  UnitDamage: 6
   MaxHp: 75
-  AttackDelay: 1
-  MoveSpeed: 1
-  AttackRadius: 4
-  SpawnCoolTime: 9
+  AttackDelay: 1.5
+  MoveSpeed: 2.2
+  AttackRadius: 3
+  SpawnCoolTime: 5
   UnitProjectile: {fileID: 328351910306364731, guid: 22fb937684354734dada39c3063a6951, type: 3}

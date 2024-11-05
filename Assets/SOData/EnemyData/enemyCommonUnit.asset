@@ -16,7 +16,8 @@ MonoBehaviour:
   unitDamage: 18
   maxHp: 60
   attackDelay: 1
-  moveSpeed: 1
+  moveSpeed: 3
   spawnCoolTime: 5
   attackRadius: 4
+  usedCost: 80
   unitProjectile: {fileID: 7511845003413620687, guid: 81264a90314f0e14b9467883bd5c77ed, type: 3}

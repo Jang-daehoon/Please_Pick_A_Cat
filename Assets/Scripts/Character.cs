@@ -46,7 +46,13 @@ public class Character : MonoBehaviour
         }
         AttackRange(attackRadius);
     }
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("GameCleaner"))
+        {
+            Dead();
+        }
+    }
     protected virtual void Move()
     {
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
@@ -167,10 +173,11 @@ public class Character : MonoBehaviour
         {
             curHp = 0;
         }
-
+        gameObject.tag = "Untagged";
+        gameObject.layer = 0;
         GameObject AcensionObj = Instantiate(GameManager.Instance.AcensionPrefab, transform.position, transform.rotation, null);
         animator.SetTrigger("Dead");
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0.5f);
         // 사망 애니메이션 실행
     }
 }

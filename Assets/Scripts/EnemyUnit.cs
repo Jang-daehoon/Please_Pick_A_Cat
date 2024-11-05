@@ -10,6 +10,7 @@ public class EnemyUnit : Character
     {
         Unitinit();
     }
+
     private void Unitinit()
     {
         CharacterName = enemyUnitSO.unitName;
