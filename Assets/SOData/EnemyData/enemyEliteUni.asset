@@ -19,5 +19,5 @@ MonoBehaviour:
   moveSpeed: 4.25
   spawnCoolTime: 10
   attackRadius: 5
-  usedCost: 120
+  usedCost: 100
   unitProjectile: {fileID: 7511845003413620687, guid: c64759dbdb76d5047857f2e046fb5158, type: 3}

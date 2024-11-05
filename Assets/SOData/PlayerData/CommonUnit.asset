@@ -15,8 +15,8 @@ MonoBehaviour:
   unitType: 0
   UnitName: CommonUnit
   UsedCost: 80
-  UnitDamage: 12
-  MaxHp: 50
+  UnitDamage: 10
+  MaxHp: 60
   AttackDelay: 1
   MoveSpeed: 3
   AttackRadius: 4

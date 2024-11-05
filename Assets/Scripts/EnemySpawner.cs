@@ -61,6 +61,7 @@ public class EnemySpawner : MonoBehaviour
         if (timer >= selectIncrementInterval && curCost < selectMaxCost)
         {
             curCost++;
+            timer = 0f;
         }
 
         enemyCommonTimer += Time.deltaTime;

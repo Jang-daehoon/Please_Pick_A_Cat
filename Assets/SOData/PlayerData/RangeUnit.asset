@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 3
   UnitName: RangeUnit
-  UsedCost: 300
-  UnitDamage: 8
+  UsedCost: 200
+  UnitDamage: 12
   MaxHp: 40
-  AttackDelay: 0.35
+  AttackDelay: 0.3
   MoveSpeed: 4.5
   AttackRadius: 10
   SpawnCoolTime: 15

@@ -63,9 +63,9 @@ public class GameManager : MonoBehaviour
     public bool isLevelHard;
 
     [Header("GameLevelData")]
-    public bool isEasyClear = false;
-    public bool isNomalClear = false;
-    public bool isHardClear = false;
+    public bool isEasyClear;
+    public bool isNomalClear;
+    public bool isHardClear;
 
     [Header("PlayerCastleData")]
     public float playerTowerMaxHp;
@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        LoadLevelData();
         LaserCoolTime = 48;
         isReloadingDone = false;
         GameSet.SetActive(false);
@@ -121,7 +123,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StageName = "야옹이왕국";
+        if (isLevelEasy)
+        {
+            StageName = "야옹이왕국";
+        }
+        else if (isLevelNomal)
+        {
+            StageName = "근육고양이왕국";
+        }
+        else if (isLevelHard)
+        {
+            StageName = "지옥고양이왕국";
+        }
     }
 
     void Update()
@@ -337,7 +350,7 @@ public class GameManager : MonoBehaviour
             {
                 curCost -= levelUpCost[CurLevel];
                 CurLevel++;
-                maxCost += 50;
+                maxCost += 80;
                 Debug.Log($"Level이 상승했습니다. 현재 Lv.{CurLevel}");
             }
             else
@@ -393,5 +406,27 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("재장전이 되지 않아 발사에 실패했습니다.");
         }
+    }
+    public void SaveLevelData()
+    {
+        // 각 레벨의 클리어 여부를 저장
+        PlayerPrefs.SetInt("EasyLevelClear", isEasyClear ? 1 : 0);
+        PlayerPrefs.SetInt("NomalLevelClear", isNomalClear ? 1 : 0);
+        PlayerPrefs.SetInt("HardLevelClear", isHardClear ? 1 : 0);
+
+        // 변경 사항을 디스크에 저장
+        PlayerPrefs.Save();
+
+        // 저장된 데이터 확인
+        Debug.Log("Level Easy: " + PlayerPrefs.GetInt("Level_Easy"));
+        Debug.Log("Level Nomal: " + PlayerPrefs.GetInt("Level_Nomal"));
+        Debug.Log("Level Hard: " + PlayerPrefs.GetInt("Level_Hard"));
+    }
+    public void LoadLevelData()
+    {
+        // 각 레벨의 클리어 여부를 불러옴
+        isEasyClear = PlayerPrefs.GetInt("EasyLevelClear", 0) == 1;
+        isNomalClear = PlayerPrefs.GetInt("NomalLevelClear", 0) == 1;
+        isHardClear = PlayerPrefs.GetInt("HardLevelClear", 0) == 1;
     }
 }

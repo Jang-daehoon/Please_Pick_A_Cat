@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 1
   UnitName: TankerUnit
-  UsedCost: 90
+  UsedCost: 100
   UnitDamage: 6
-  MaxHp: 75
+  MaxHp: 90
   AttackDelay: 1.5
   MoveSpeed: 2.2
   AttackRadius: 3

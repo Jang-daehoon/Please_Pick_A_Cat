@@ -54,6 +54,9 @@ public class UiManager : MonoBehaviour
     public ParticleSystem RealodingParticle;
     public ParticleSystem ReloadingDoneParticle;
 
+    [Header("UI Notice")]
+    public GameObject CantSelectStage;
+
     private void Awake()
     {
         Instance = this;
@@ -83,6 +86,10 @@ public class UiManager : MonoBehaviour
         battleExitNoBtn.onClick.AddListener(BattleExitCancel);
     }
 
+    private void Update()
+    { 
+
+    }
     public void GameStart()
     {
         // UI를 비활성화하기 전에 상태 점검 및 업데이트
@@ -130,34 +137,55 @@ public class UiManager : MonoBehaviour
     }
     public void SelectNomalLevel()
     {
-        GameManager.Instance.isLevelNomal = true;
+        if (GameManager.Instance.isEasyClear == false)
+        {
+            StartCoroutine(CantSelectStageNotice());
+        }
+        else if (GameManager.Instance.isEasyClear == true)
+        {
+            GameManager.Instance.isLevelNomal = true;
 
-        TitleUI.SetActive(false);
-        isTitleUIActive = false;
+            TitleUI.SetActive(false);
+            isTitleUIActive = false;
 
-        StageSelectUISet.SetActive(false);
-        isStageSelectactive = false;
+            StageSelectUISet.SetActive(false);
+            isStageSelectactive = false;
 
-        inGameUi.SetActive(true);
-        isInGameUIActive = true;
-        GameManager.Instance.GameStartInit();
-        GameManager.Instance.GameSet.SetActive(true);
+            inGameUi.SetActive(true);
+            isInGameUIActive = true;
+            GameManager.Instance.GameStartInit();
+            GameManager.Instance.GameSet.SetActive(true);
+        }
     }
     public void SelectHardLevel()
     {
-        GameManager.Instance.isLevelHard = true;
+        if (GameManager.Instance.isNomalClear == false)
+        {
+            StartCoroutine(CantSelectStageNotice());
+        }
+        else if(GameManager.Instance.isNomalClear == true)
+        {
+            GameManager.Instance.isLevelHard = true;
 
-        TitleUI.SetActive(false);
-        isTitleUIActive = false;
+            TitleUI.SetActive(false);
+            isTitleUIActive = false;
 
-        StageSelectUISet.SetActive(false);
-        isStageSelectactive = false;
+            StageSelectUISet.SetActive(false);
+            isStageSelectactive = false;
 
-        inGameUi.SetActive(true);
-        isInGameUIActive = true;
-        GameManager.Instance.GameStartInit();
-        GameManager.Instance.GameSet.SetActive(true);
+            inGameUi.SetActive(true);
+            isInGameUIActive = true;
+            GameManager.Instance.GameStartInit();
+            GameManager.Instance.GameSet.SetActive(true);
+        }
     }
+    private IEnumerator CantSelectStageNotice()
+    {
+        CantSelectStage.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        CantSelectStage.SetActive(false);
+    }
+
     //승리 UI 상호작용
     public void VictoryUiSet()
     {
@@ -178,6 +206,8 @@ public class UiManager : MonoBehaviour
             GameManager.Instance.isHardClear = true;
             GameManager.Instance.isLevelHard = false;
         }
+
+        GameManager.Instance.SaveLevelData();   //클리어 데이터 저장
 
         victoryUi.SetActive(true);
         isVictoryUiActive = true;

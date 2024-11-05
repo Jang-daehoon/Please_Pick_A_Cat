@@ -15,7 +15,7 @@ MonoBehaviour:
   unitType: 2
   UnitName: MeleeUnit
   UsedCost: 150
-  UnitDamage: 8
+  UnitDamage: 15
   MaxHp: 80
   AttackDelay: 0.5
   MoveSpeed: 4
