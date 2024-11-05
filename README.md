@@ -7,6 +7,8 @@
 <div align="center">기획에 해당되는 기능 및 UI등을 그대로 구현했습닌다.</div>
 <div align="center">구현하면서 기획에 해당하는 내용 중 기본적인 구현에 해당하는 내용이 빠져있습니다.</div>
 <div align="center">구현하면서 가장 많이 느낀 것이 누락된 내용이 많습니다.</div>
+<div align="center">구현 후 누락된 부분 및 일부 기획서와는 다르게 수정 및 구현했습니다. </div>
+<div align="center">타이틀 화면 구성 및 스테이지 선택 기능 추가, 누락된 버튼 UI 상호작용 연결, 클리어 시 저장되며 클리어된 Stage에 대한 정보 저장 추가 </div>
 
 <div align="center"> <h1>Tech Stack</h1>
 <h3>Platforms & Language</h3>
