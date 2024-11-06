@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 7511845003413620687}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.84, y: 3.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -226,7 +226,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: 
-  DeadParticle: {fileID: 0}
   maxHp: 0
   curHp: 0
   damage: 0
@@ -238,8 +237,11 @@ MonoBehaviour:
   isDead: 0
   isMoved: 0
   canAttack: 0
-  Targets: []
+  attackTarget:
+  - {fileID: 0}
+  - {fileID: 0}
   TargetLayer:
     serializedVersion: 2
     m_Bits: 8
+  spriteRenderer: {fileID: 0}
   enemyUnitSO: {fileID: 11400000, guid: b6392dbb1049cd64493effc342aa400c, type: 2}

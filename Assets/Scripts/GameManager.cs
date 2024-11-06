@@ -264,12 +264,23 @@ public class GameManager : MonoBehaviour
             curCost -= playerUnits[0].UsedCost;
 
             //오브젝트 풀링
-            /*PlayerUnit commonCat = PlayerUnitPool.pool.Pop();
-            commonCat.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.*/
-            
-            GameObject newCommonUnit = Instantiate(playerUnits[0].UnitProjectile, spawnPos.position, transform.rotation, null); //일반소환
+            PlayerUnit commonCat = PlayerUnitPool.pool.Pop();
+            commonCat.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.
+            commonCat.Unitinit(playerUnits[0]);
+            commonCat.ResetUnit();
+            //Sprite변경
+            commonCat.GetComponentInChildren<SpriteRenderer>().sprite = playerUnits[0].UnitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+            //Animator변경
+            // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+            Animator commonCatAnimator = commonCat.GetComponent<Animator>();
+            Animator unitProjectileAnimator = playerUnits[0].UnitProjectile.GetComponent<Animator>();
 
-            Vector2 CommonVfxPos = new Vector2(newCommonUnit.transform.position.x-1f, newCommonUnit.transform.position.y + 2f);
+            // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+            commonCatAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
+            //GameObject newCommonUnit = Instantiate(playerUnits[0].UnitProjectile, spawnPos.position, transform.rotation, null); //일반소환
+
+            Vector2 CommonVfxPos = new Vector2(commonCat.transform.position.x-1f, commonCat.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation,null);
             Destroy(newSpawnParticle, 2f);
             StartCoroutine(ButtonCooltime(spawnCommonButton, commonCoolObj, commonCoolTimeBar, playerUnits[0].SpawnCoolTime));
@@ -289,8 +300,23 @@ public class GameManager : MonoBehaviour
         if (curCost > playerUnits[1].UsedCost)
         {
             curCost -= playerUnits[1].UsedCost;
-            GameObject newTankerUnit = Instantiate(playerUnits[1].UnitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 TankerVfxPos = new Vector2(newTankerUnit.transform.position.x - 1f, newTankerUnit.transform.position.y + 2f);
+            //오브젝트 풀링
+            PlayerUnit tankerCat = PlayerUnitPool.pool.Pop();
+            tankerCat.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.
+            tankerCat.Unitinit(playerUnits[1]);
+            tankerCat.ResetUnit();
+            //Sprite변경
+            tankerCat.GetComponentInChildren<SpriteRenderer>().sprite = playerUnits[1].UnitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+            //Animator변경
+            // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+            Animator tankerCatAnimator = tankerCat.GetComponent<Animator>();
+            Animator unitProjectileAnimator = playerUnits[1].UnitProjectile.GetComponent<Animator>();
+
+            // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+            tankerCatAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
+            //GameObject newTankerUnit = Instantiate(playerUnits[1].UnitProjectile, spawnPos.position, transform.rotation, null);
+            Vector2 TankerVfxPos = new Vector2(tankerCat.transform.position.x - 1f, tankerCat.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(tankerSpawnVfx, TankerVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
             StartCoroutine(ButtonCooltime(spawnTankerButton,tankerCoolObj, tankerCoolTimeBar, playerUnits[1].SpawnCoolTime));
@@ -310,8 +336,24 @@ public class GameManager : MonoBehaviour
         if (curCost > playerUnits[2].UsedCost)
         {
             curCost -= playerUnits[2].UsedCost;
-            GameObject newMeleeUnit = Instantiate(playerUnits[2].UnitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 MeleeVfxPos = new Vector2(newMeleeUnit.transform.position.x - 1f, newMeleeUnit.transform.position.y + 2f);
+            //오브젝트 풀링
+            PlayerUnit meleeUnit = PlayerUnitPool.pool.Pop();
+            meleeUnit.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.
+            meleeUnit.Unitinit(playerUnits[2]);
+            meleeUnit.ResetUnit();
+            //Sprite변경
+            meleeUnit.GetComponentInChildren<SpriteRenderer>().sprite = playerUnits[2].UnitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+            //Animator변경
+            // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+            Animator meleeUnitAnimator = meleeUnit.GetComponent<Animator>();
+            Animator unitProjectileAnimator = playerUnits[2].UnitProjectile.GetComponent<Animator>();
+
+            // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+            meleeUnitAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
+
+            //GameObject newMeleeUnit = Instantiate(playerUnits[2].UnitProjectile, spawnPos.position, transform.rotation, null);
+            Vector2 MeleeVfxPos = new Vector2(meleeUnit.transform.position.x - 1f, meleeUnit.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(meleeSpawnVfx, MeleeVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
             StartCoroutine(ButtonCooltime(spawnMeleeButton,meleeCoolObj, meleeCoolTimeBar, playerUnits[2].SpawnCoolTime));
@@ -331,8 +373,24 @@ public class GameManager : MonoBehaviour
         if (curCost > playerUnits[3].UsedCost)
         {
             curCost -= playerUnits[3].UsedCost;
-            GameObject newRangeUnit = Instantiate(playerUnits[3].UnitProjectile, spawnPos.position, transform.rotation, null);
-            Vector2 RangeVfxPos = new Vector2(newRangeUnit.transform.position.x - 1f, newRangeUnit.transform.position.y + 2f);
+            //오브젝트 풀링
+            PlayerUnit rangeUnit = PlayerUnitPool.pool.Pop();
+            rangeUnit.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.
+            rangeUnit.Unitinit(playerUnits[3]);
+            rangeUnit.ResetUnit();
+            //Sprite변경
+            rangeUnit.GetComponentInChildren<SpriteRenderer>().sprite = playerUnits[3].UnitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+            //Animator변경
+            // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+            Animator rangeUnitAnimator = rangeUnit.GetComponent<Animator>();
+            Animator unitProjectileAnimator = playerUnits[3].UnitProjectile.GetComponent<Animator>();
+
+            // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+            rangeUnitAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
+
+            //GameObject newRangeUnit = Instantiate(playerUnits[3].UnitProjectile, spawnPos.position, transform.rotation, null);
+            Vector2 RangeVfxPos = new Vector2(rangeUnit.transform.position.x - 1f, rangeUnit.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(RangeSpawnVfx, RangeVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
             StartCoroutine(ButtonCooltime(spawnRangeButton, rangeCoolObj, rangeCoolTimeBar, playerUnits[3].SpawnCoolTime));

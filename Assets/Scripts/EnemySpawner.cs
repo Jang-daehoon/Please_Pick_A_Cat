@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -136,7 +137,24 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnCommonUnit()
     {
-        Instantiate(enemyUnitSo[0].unitProjectile, spawnPos.position, transform.rotation, null);
+        //Instantiate(enemyUnitSo[0].unitProjectile, spawnPos.position, transform.rotation, null);
+        EnemyUnit commonEnemyUnit = EnemyUnitPool.pool.Pop();
+        commonEnemyUnit.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);
+        commonEnemyUnit.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        //초기화
+        commonEnemyUnit.UnitInit(enemyUnitSo[0]);
+        commonEnemyUnit.ResetUnit();
+        //Sprite변경
+        commonEnemyUnit.spriteRenderer.sprite = enemyUnitSo[0].unitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+        
+        //Animator변경
+        // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+        Animator enemyAnimator = commonEnemyUnit.GetComponent<Animator>();
+        Animator unitProjectileAnimator = enemyUnitSo[0].unitProjectile.GetComponent<Animator>();
+
+        // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+        enemyAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
         Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
         GameObject newSpawnParticle = Instantiate(commonSpawnVfx, spawnVfxPos, transform.rotation, null);
         Destroy(newSpawnParticle, 2f);
@@ -146,7 +164,24 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEliteUnit()
     {
-        Instantiate(enemyUnitSo[1].unitProjectile, spawnPos.position, transform.rotation, null);
+        //Instantiate(enemyUnitSo[1].unitProjectile, spawnPos.position, transform.rotation, null);
+        EnemyUnit eliteEnemyUnit = EnemyUnitPool.pool.Pop();
+        eliteEnemyUnit.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);
+        eliteEnemyUnit.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        //초기화
+        eliteEnemyUnit.UnitInit(enemyUnitSo[1]);
+        eliteEnemyUnit.ResetUnit();
+        //Sprite변경
+        eliteEnemyUnit.spriteRenderer.sprite = enemyUnitSo[1].unitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+        eliteEnemyUnit.spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+        //Animator변경
+        // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+        Animator enemyAnimator = eliteEnemyUnit.GetComponent<Animator>();
+        Animator unitProjectileAnimator = enemyUnitSo[1].unitProjectile.GetComponent<Animator>();
+
+        // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+        enemyAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
         Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
         GameObject newSpawnParticle = Instantiate(eliteSpawnVfx, spawnVfxPos, transform.rotation, null);
         Destroy(newSpawnParticle, 2f);
@@ -156,7 +191,23 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnBossUnit()
     {
-        Instantiate(enemyUnitSo[2].unitProjectile, spawnPos.position, transform.rotation, null);
+        //Instantiate(enemyUnitSo[2].unitProjectile, spawnPos.position, transform.rotation, null);
+        EnemyUnit bossEnemyUnit = EnemyUnitPool.pool.Pop();
+        bossEnemyUnit.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);
+        bossEnemyUnit.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        //초기화
+        bossEnemyUnit.UnitInit(enemyUnitSo[2]);
+        bossEnemyUnit.ResetUnit();
+        //Sprite변경
+        bossEnemyUnit.spriteRenderer.sprite = enemyUnitSo[2].unitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
+        //Animator변경
+        // 먼저 commonCat과 UnitProjectile의 Animator 컴포넌트를 각각 가져온다.
+        Animator enemyAnimator = bossEnemyUnit.GetComponent<Animator>();
+        Animator unitProjectileAnimator = enemyUnitSo[2].unitProjectile.GetComponent<Animator>();
+
+        // 이제 commonCatAnimator의 상태를 unitProjectileAnimator의 상태로 변경.
+        enemyAnimator.runtimeAnimatorController = unitProjectileAnimator.runtimeAnimatorController;
+
         Vector2 spawnVfxPos = new Vector2(spawnPos.position.x - 1f, spawnPos.position.y + 2f);
         GameObject newSpawnParticle = Instantiate(bossSpawnVfx, spawnVfxPos, transform.rotation, null);
         Destroy(newSpawnParticle, 2f);
