@@ -142,8 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: 0
-  HitParticle: {fileID: 2784243206163110371, guid: e3da8eac68a90884e8c98c09da427bda, type: 3}
-  DeadParticle: {fileID: 0}
   maxHp: 0
   curHp: 0
   damage: 0
@@ -155,10 +153,14 @@ MonoBehaviour:
   isDead: 0
   isMoved: 0
   canAttack: 0
-  Targets: []
+  attackTarget:
+  - {fileID: 0}
+  - {fileID: 0}
   TargetLayer:
     serializedVersion: 2
     m_Bits: 64
+  spriteRenderer: {fileID: 0}
+  DeadParticle: {fileID: 100002, guid: d4a66304d9609aa46b6b14565b193481, type: 3}
   playerUnitSo: {fileID: 11400000, guid: 6c7279038d1c4044c82dbfcd9e638a4a, type: 2}
 --- !u!1 &1180773298586881243
 GameObject:

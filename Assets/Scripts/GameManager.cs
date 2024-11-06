@@ -61,6 +61,8 @@ public class GameManager : MonoBehaviour
     public bool isLevelEasy;
     public bool isLevelNomal;
     public bool isLevelHard;
+    public GameObject levelUpNotice;
+    public GameObject lackCost;
 
     [Header("GameLevelData")]
     public bool isEasyClear;
@@ -280,14 +282,14 @@ public class GameManager : MonoBehaviour
 
             //GameObject newCommonUnit = Instantiate(playerUnits[0].UnitProjectile, spawnPos.position, transform.rotation, null); //일반소환
 
-            Vector2 CommonVfxPos = new Vector2(commonCat.transform.position.x-1f, commonCat.transform.position.y + 2f);
-            GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation,null);
+            Vector2 CommonVfxPos = new Vector2(commonCat.transform.position.x - 1f, commonCat.transform.position.y + 2f);
+            GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
             StartCoroutine(ButtonCooltime(spawnCommonButton, commonCoolObj, commonCoolTimeBar, playerUnits[0].SpawnCoolTime));
             StartCoroutine(CommonUnitCooldown());
         }
         else
-            Debug.Log("Cost가 부족합니다.");
+            lackCost.GetComponent<Animator>().SetTrigger("LackOfCost");
     }
     private IEnumerator CommonUnitCooldown()
     {
@@ -323,7 +325,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(TankerUnitCooldown());
         }
         else
-            Debug.Log("Cost가 부족합니다.");
+            lackCost.GetComponent<Animator>().SetTrigger("LackOfCost");
     }
     private IEnumerator TankerUnitCooldown()
     {
@@ -360,7 +362,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(MeleeUnitCooldown());
         }
         else
-            Debug.Log("Cost가 부족합니다.");
+            lackCost.GetComponent<Animator>().SetTrigger("LackOfCost");
     }
     private IEnumerator MeleeUnitCooldown()
     {
@@ -397,7 +399,7 @@ public class GameManager : MonoBehaviour
             StartCoroutine(RangeUnitCooldown());
         }
         else
-            Debug.Log("Cost가 부족합니다.");
+            lackCost.GetComponent<Animator>().SetTrigger("LackOfCost");
     }
     private IEnumerator RangeUnitCooldown()
     {
@@ -415,10 +417,12 @@ public class GameManager : MonoBehaviour
                 curCost -= levelUpCost[CurLevel];
                 CurLevel++;
                 maxCost += 80;
+                levelUpNotice.GetComponent<Animator>().SetTrigger("LevelUp");
                 Debug.Log($"Level이 상승했습니다. 현재 Lv.{CurLevel}");
             }
             else
             {
+                lackCost.GetComponent<Animator>().SetTrigger("LackOfCost");
                 Debug.Log("Cost가 부족해 LevelUp이 불가능 합니다.");
             }
         }

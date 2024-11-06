@@ -244,4 +244,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   spriteRenderer: {fileID: 0}
+  DeadParticle: {fileID: 100002, guid: d4a66304d9609aa46b6b14565b193481, type: 3}
   enemyUnitSO: {fileID: 11400000, guid: 3d86ffdaeeda43c42bcd1d62f15770b9, type: 2}

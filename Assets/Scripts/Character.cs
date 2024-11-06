@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
     protected Collider2D col;
     protected Animator animator;
     [HideInInspector]public SpriteRenderer spriteRenderer;
+    public GameObject DeadParticle;
 
     private void Awake()
     {
@@ -223,7 +224,7 @@ public class Character : MonoBehaviour
         gameObject.tag = "Untagged";
         gameObject.layer = 0;
         GameObject AcensionObj = Instantiate(GameManager.Instance.AcensionPrefab, transform.position, transform.rotation);
-        animator.SetBool("Dead", isDead);
-        Destroy(gameObject, 0.5f); // 사망 애니메이션 실행
+        //animator.SetBool("Dead", isDead);
+        //Destroy(gameObject, 0.5f); // 사망 애니메이션 실행
     }
 }

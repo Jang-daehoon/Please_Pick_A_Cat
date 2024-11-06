@@ -34,9 +34,6 @@ public class EnemyUnit : Character
         // 유닛의 게임 오브젝트 태그와 레이어 설정 (필요시 수정)
         gameObject.tag = "Enemy"; // 태그를 "Enemy"로 설정
         gameObject.layer = 6; // 레이어를 적합한 레이어 값으로 설정 (여기서는 6번 예시)
-
-        // 애니메이터에 "Dead" 상태를 반영
-        animator.SetBool("Dead", isDead); // "Dead" 애니메이션 상태를 false로 설정
     }
     public void ResetUnit()
     {
@@ -57,7 +54,6 @@ public class EnemyUnit : Character
             animator.SetFloat("Speed", 0);
             animator.ResetTrigger("Attack");
             animator.ResetTrigger("Hit");
-            animator.ResetTrigger("Dead");
         }
     }
 
@@ -206,22 +202,14 @@ public class EnemyUnit : Character
 
         gameObject.tag = "Untagged";
         gameObject.layer = 0;
-        animator.SetTrigger("Dead");
         GameObject AcensionObj = Instantiate(GameManager.Instance.AcensionPrefab, transform.position, transform.rotation, null);
-
+        GameObject DeadParticleActive = Instantiate(DeadParticle, transform.position, transform.rotation, null);
+        Destroy(DeadParticleActive, 2f);
         transform.position = new Vector2(-100, -100);
 
         // 현재 실행 중인 코루틴들을 모두 중지
         StopAllCoroutines();
-        // 애니메이터 파라미터 초기화
-        if (animator != null)
-        {
-            animator.SetFloat("Speed", 0);
-            animator.ResetTrigger("Attack");
-            animator.ResetTrigger("Hit");
-            animator.ResetTrigger("Dead");
-        }
-        EnemyUnitPool.pool.Push(this, 0.5f);
+        EnemyUnitPool.pool.Push(this, 1f);
     }
     public void OnDeath()
     {
