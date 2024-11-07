@@ -149,7 +149,13 @@ public class EnemyUnit : Character
                 Attack(attackTarget[i].GetComponent<Collider2D>());
             }
         }
-
+        //적 공격 효과음 재생
+        if (UiManager.Instance.isEffectClipMute == true)
+        {
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.enemyAtkClip, 0f);
+        }
+        else
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.enemyAtkClip);
         animator.SetTrigger("Attack"); // 애니메이션 트리거는 루프 바깥에서 한 번만 호출
 
         yield return new WaitForSeconds(attackDelay); // 공격 간의 지연 시간
@@ -194,6 +200,13 @@ public class EnemyUnit : Character
     }
     public override void Dead()
     {
+        //유닛 사망 효과음
+        if (UiManager.Instance.isEffectClipMute == true)
+        {
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.unitDeadClip, 0f);
+        }
+        else
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.unitDeadClip);
         isDead = true;
         ClearAttackTargets(); // 기존 메서드 사용
         // 전투 상태 초기화

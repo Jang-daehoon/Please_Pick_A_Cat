@@ -31,32 +31,29 @@ public class CamTransition : MonoBehaviour
         {
             movement += Vector3.right;
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+
+        if (Input.GetKeyDown(KeyCode.W) && isExpanded == false && isCollapsed == false)
         {
-            if (!isExpanded)
-            {
-                isExpanded = true;
-                vCam.m_Lens.OrthographicSize = 35;
-            }
-            else
-            {
-                isExpanded = false;
-                vCam.m_Lens.OrthographicSize = originalOrthoSize;
-            }
+            isExpanded = true;
+            vCam.m_Lens.OrthographicSize = 35;
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if(Input.GetKeyDown(KeyCode.W) && isExpanded == true && isCollapsed == false)
         {
-            if (!isCollapsed)
-            {
-                isCollapsed = true;
-                vCam.m_Lens.OrthographicSize = 5;
-            }
-            else
-            {
-                isCollapsed = false;
-                vCam.m_Lens.OrthographicSize = originalOrthoSize;
-            }
+            isExpanded = false;
+            vCam.m_Lens.OrthographicSize = originalOrthoSize;
         }
+
+        if (Input.GetKeyDown(KeyCode.S) && isExpanded == false && isCollapsed == false)
+        {
+            isCollapsed = true;
+            vCam.m_Lens.OrthographicSize = 5;
+        }
+        else if(Input.GetKeyDown(KeyCode.S) && isExpanded == false && isCollapsed == true)
+        {
+            isCollapsed = false;
+            vCam.m_Lens.OrthographicSize = originalOrthoSize;
+        }
+
 
         // 카메라의 현재 위치를 부드럽게 이동
         Vector3 newPosition = transform.position + movement * moveSpeed * Time.deltaTime;

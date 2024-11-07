@@ -60,6 +60,13 @@ public class PlayerUnit : Character
 
     public override void Dead()
     {
+        //유닛 사망 효과음
+        if (UiManager.Instance.isEffectClipMute == true || GameManager.Instance.isVictory == true || GameManager.Instance.isDefeat == true)
+        {
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.unitDeadClip, 0f);
+        }
+        else
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.unitDeadClip);
         isDead = true;
         ClearAttackTargets(); // 기존 메서드 사용
         // 전투 상태 초기화

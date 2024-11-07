@@ -26,13 +26,14 @@ public class Character : MonoBehaviour
     protected Animator animator;
     [HideInInspector]public SpriteRenderer spriteRenderer;
     public GameObject DeadParticle;
-
+    protected AudioSource audioSource;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     protected void Start()
@@ -150,7 +151,14 @@ public class Character : MonoBehaviour
                 Attack(attackTarget[i].GetComponent<Collider2D>());
             }
         }
-
+        //아군 유닛 공격 효과음 재생
+        if (UiManager.Instance.isEffectClipMute == true)
+        {
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.playerAtkClip, 0f);
+        }
+        else
+            AudioManager.Instance.PlayEffectSound(audioSource, AudioManager.Instance.playerAtkClip);
+        
         animator.SetTrigger("Attack"); // 애니메이션 트리거는 루프 바깥에서 한 번만 호출
 
         yield return new WaitForSeconds(attackDelay); // 공격 간의 지연 시간
