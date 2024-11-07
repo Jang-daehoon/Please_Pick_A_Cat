@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log($"현재 TimeScale = {Time.timeScale}");
+        //Debug.Log($"현재 TimeScale = {Time.timeScale}");
         if (isReloading == false)
         {
             StartCoroutine(ReloadingLaser());
