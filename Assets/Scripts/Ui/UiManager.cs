@@ -17,8 +17,10 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject StageSelectUISet;
 
     [SerializeField] private GameObject inGameUi;
+
     [SerializeField] private GameObject victoryUi;
     [SerializeField] private GameObject defeatUi;
+
     [SerializeField] private GameObject resume_OptionUi;
     [SerializeField] private GameObject exitUi;
     [SerializeField] private GameObject HelpUI;
@@ -39,18 +41,35 @@ public class UiManager : MonoBehaviour
     [Header("UIObjectButtons")]
     [SerializeField] private Button gameStartBtn;
     [SerializeField] private Button gameExitBtn;
+
     [SerializeField] private Button victoryButton;
     [SerializeField] private Button defeatButton;
+
     [SerializeField] private Button battleExitBtn;
     [SerializeField] private Button battleExitYesBtn;
     [SerializeField] private Button battleExitNoBtn;
+
     [SerializeField] private Button optionBtn;
     [SerializeField] private Button optionContinueBtn;
     [SerializeField] private Button HelpBtn;
     [SerializeField] private Button helpExitBtn;
+
     [SerializeField] private Button bgmMuteBtn;
     [SerializeField] private Button effectClipMuteBtn;
+
     [SerializeField] private Button SpeedUpBtn;
+    [Header("게임 상에서 상호작용 하는 버튼, 쿨타임 게임오브젝트 및 이미지")]
+    public Button levelUpBtn;
+    [Header("Common-----------------------------------")]
+    public Button spawnCommonButton;
+    [Header("Tanker------------------------------------")]
+    public Button spawnTankerButton;
+    [Header("Melee-------------------------------------")]
+    public Button spawnMeleeButton;
+    [Header("Range------------------------------------")]
+    public Button spawnRangeButton;
+    [Header("TowerLaser-------------------------------")]
+    public Button laserFireBtn;
 
     [Header("Mute Button States")]
     public bool isBgmMute = false;
@@ -109,8 +128,24 @@ public class UiManager : MonoBehaviour
         effectClipMuteBtn.onClick.AddListener(EffectMute);
 
         SpeedUpBtn.onClick.AddListener(SpeedUpSet);
+    }
+    private void Start()
+    {
+        //소환
+        spawnCommonButton.onClick.RemoveAllListeners();
+        spawnCommonButton.onClick.AddListener(GameManager.Instance.spawnCommonCat);
 
+        spawnTankerButton.onClick.RemoveAllListeners();
+        spawnTankerButton.onClick.AddListener(GameManager.Instance.spawnTankerCat);
 
+        spawnMeleeButton.onClick.RemoveAllListeners();
+        spawnMeleeButton.onClick.AddListener(GameManager.Instance.spawnMeleeCat);
+
+        spawnRangeButton.onClick.RemoveAllListeners();
+        spawnRangeButton.onClick.AddListener(GameManager.Instance.spawnRangeCat);
+
+        levelUpBtn.onClick.AddListener(GameManager.Instance.WalletLevelUp);
+        laserFireBtn.onClick.AddListener(GameManager.Instance.LaserFire);
     }
     private void InitializeMuteButtonColors()
     {

@@ -4506,6 +4506,12 @@ MonoBehaviour:
   bgmMuteBtn: {fileID: 1778571352}
   effectClipMuteBtn: {fileID: 2050801257}
   SpeedUpBtn: {fileID: 2108096731}
+  levelUpBtn: {fileID: 1977337117}
+  spawnCommonButton: {fileID: 68080015}
+  spawnTankerButton: {fileID: 453186832}
+  spawnMeleeButton: {fileID: 1647204581}
+  spawnRangeButton: {fileID: 204095985}
+  laserFireBtn: {fileID: 361457143}
   isBgmMute: 0
   isEffectClipMute: 0
   mutedColor: {r: 1, g: 0, b: 0, a: 1}
@@ -6517,21 +6523,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0f4981c21ac2cbe45a298894501532ce, type: 2}
   - {fileID: 11400000, guid: 534614de733ac3041b8b6f3b9b7d275d, type: 2}
   - {fileID: 11400000, guid: ae22647730a07434b8cb7fc034bd2327, type: 2}
-  levelUpBtn: {fileID: 1977337117}
-  laserFireBtn: {fileID: 361457143}
-  spawnCommonButton: {fileID: 68080015}
   commonCoolObj: {fileID: 334214904}
   commonCoolTimeBar: {fileID: 261712222}
   commUnitReady: 0
-  spawnTankerButton: {fileID: 453186832}
   tankerCoolObj: {fileID: 2072187365}
   tankerCoolTimeBar: {fileID: 1324741047}
   tankerUnitReady: 0
-  spawnMeleeButton: {fileID: 1647204581}
   meleeCoolObj: {fileID: 511945387}
   meleeCoolTimeBar: {fileID: 1866229936}
   meleeUnitReady: 0
-  spawnRangeButton: {fileID: 204095985}
   rangeCoolObj: {fileID: 1339293360}
   rangeCoolTimeBar: {fileID: 643965093}
   rangeUnitReady: 0
