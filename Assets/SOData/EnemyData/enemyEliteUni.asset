@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970a17e0a555f4040b7bdc201c2cf375, type: 3}
   m_Name: enemyEliteUni
   m_EditorClassIdentifier: 
+  unitId: 1
   unitName: enemyEliteUnit
   unitDamage: 25
   maxHp: 80

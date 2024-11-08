@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf45c746369199f46b8c9bbe619bae54, type: 3}
   m_Name: RangeUnit
   m_EditorClassIdentifier: 
-  unitType: 3
+  unitId: 3
   UnitName: RangeUnit
   UsedCost: 200
   UnitDamage: 12

@@ -58,19 +58,36 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Button effectClipMuteBtn;
 
     [SerializeField] private Button SpeedUpBtn;
+
+    [Header("PlayerCastleUI")]
+    public Image playerCastleHpBar;
+    [Header("EnemyCastleUI")]
+    public Image enemyCastleHpBar;
+
     [Header("게임 상에서 상호작용 하는 버튼, 쿨타임 게임오브젝트 및 이미지")]
     public Button levelUpBtn;
     [Header("Common-----------------------------------")]
     public Button spawnCommonButton;
+    public Image commonCoolTimeBar;
+    public GameObject commonCoolObj;
     [Header("Tanker------------------------------------")]
     public Button spawnTankerButton;
+    public Image tankerCoolTimeBar;
+    public GameObject tankerCoolObj;
     [Header("Melee-------------------------------------")]
     public Button spawnMeleeButton;
+    public Image meleeCoolTimeBar;
+    public GameObject meleeCoolObj;
     [Header("Range------------------------------------")]
     public Button spawnRangeButton;
+    public Image rangeCoolTimeBar;
+    public GameObject rangeCoolObj;
     [Header("TowerLaser-------------------------------")]
     public Button laserFireBtn;
-
+    public Image ReloadingImage;
+    public GameObject ReadyText;
+    public GameObject TowerReloadParticle;
+    public GameObject LaserNotice;
     [Header("Mute Button States")]
     public bool isBgmMute = false;
     public bool isEffectClipMute = false;
@@ -96,7 +113,7 @@ public class UiManager : MonoBehaviour
     {
         Instance = this;
         // 초기 버튼 색상 설정
-        InitializeMuteButtonColors();
+        InitMuteBtnColors();
         
         //초기 세팅
         TitleUI.SetActive(true);
@@ -129,6 +146,7 @@ public class UiManager : MonoBehaviour
 
         SpeedUpBtn.onClick.AddListener(SpeedUpSet);
     }
+
     private void Start()
     {
         //소환
@@ -145,9 +163,11 @@ public class UiManager : MonoBehaviour
         spawnRangeButton.onClick.AddListener(GameManager.Instance.spawnRangeCat);
 
         levelUpBtn.onClick.AddListener(GameManager.Instance.WalletLevelUp);
-        laserFireBtn.onClick.AddListener(GameManager.Instance.LaserFire);
+        //laserFireBtn.onClick.AddListener(GameManager.Instance.TowerLaserObj.LaserFire);가 ArgumentException: Value does not fall within the expected range.
+        //UiManager.Start()(at Assets / Scripts / Ui / UiManager.cs:148) 에러가 발생해 람다 함수로 감싸서 호출
+        laserFireBtn.onClick.AddListener(() => GameManager.Instance.TowerLaserObj.LaserFire());
     }
-    private void InitializeMuteButtonColors()
+    private void InitMuteBtnColors()
     {
         // BGM 버튼 초기 색상
         SetButtonColor(bgmMuteBtn, isBgmMute ? mutedColor : unmutedColor);
@@ -464,5 +484,35 @@ public class UiManager : MonoBehaviour
         // 배속 상태에 따라 버튼 색상 변경
         SetButtonColor(SpeedUpBtn, isAccelerate ? Color.green : Color.white);
     }
+
+    public IEnumerator ButtonCooltime(Button button, GameObject coolObj, Image coolTimeBar, float coolTime)
+    {
+        button.interactable = false; // 버튼 비활성화
+        coolObj.SetActive(true); // 쿨타임 오브젝트 활성화
+        float elapsedTime = 0f;
+
+        while (elapsedTime < coolTime)
+        {
+            // 승리 또는 패배 상태일 때 쿨타임을 중지하고 초기화
+            if (GameManager.Instance.isVictory || GameManager.Instance.isDefeat)
+            {
+                coolTimeBar.fillAmount = 0; // 쿨타임 바 초기화
+                button.interactable = true; // 버튼 재활성화
+                coolObj.SetActive(false); // 쿨타임 오브젝트 비활성화
+                yield break; // 코루틴 종료
+            }
+
+            elapsedTime += Time.deltaTime;
+            coolTimeBar.fillAmount = elapsedTime / coolTime; // 쿨타임 바 업데이트
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        coolTimeBar.fillAmount = 0; // 쿨타임 바 초기화
+        button.interactable = true; // 버튼 재활성화
+        coolObj.SetActive(false); // 쿨타임 오브젝트 비활성화
+
+
+    }
+
 
 }

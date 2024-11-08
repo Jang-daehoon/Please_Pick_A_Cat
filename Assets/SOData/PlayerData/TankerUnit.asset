@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf45c746369199f46b8c9bbe619bae54, type: 3}
   m_Name: TankerUnit
   m_EditorClassIdentifier: 
-  unitType: 1
+  unitId: 1
   UnitName: TankerUnit
   UsedCost: 100
   UnitDamage: 6

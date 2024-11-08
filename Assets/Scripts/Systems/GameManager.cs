@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,36 +11,26 @@ public class GameManager : MonoBehaviour
     [Header("소환 가능한 유닛 data")]
     public PlayerUnitSO[] playerUnits;
 
-    [Header("게임 상에서 상호작용 하는 쿨타임 게임오브젝트 및 이미지")]
+    [Header("유닛 소환 상호작용 변수")]
     [Header("Common-----------------------------------")]
-    [SerializeField] private GameObject commonCoolObj;
-    [SerializeField] private Image commonCoolTimeBar;
     [SerializeField] private bool commUnitReady;
     [Header("Tanker------------------------------------")]
-    [SerializeField] private GameObject tankerCoolObj;
-    [SerializeField] private Image tankerCoolTimeBar;
     [SerializeField] private bool tankerUnitReady;
     [Header("Melee-------------------------------------")]
-    [SerializeField] private GameObject meleeCoolObj;
-    [SerializeField] private Image meleeCoolTimeBar;
     [SerializeField] private bool meleeUnitReady;
     [Header("Range------------------------------------")]
-    [SerializeField] private GameObject rangeCoolObj;
-    [SerializeField] private Image rangeCoolTimeBar;
     [SerializeField] private bool rangeUnitReady;
     [Header("TowerLaser-------------------------------")]
-    [SerializeField] private Image ReloadingImage;
-    [SerializeField] private GameObject ReadyText;
-    [SerializeField] private bool isReloadingDone;
-    [SerializeField] private GameObject TowerLaserObj;
-    [SerializeField] private GameObject TowerReloadParticle;
-    [SerializeField] private GameObject LaserNotice;
+    public bool isReloadingDone;
+    public FireLaser TowerLaserObj;
 
     [Header("유닛 소환 파티클")]
     [SerializeField,Tooltip("일반유닛 소환 파티클")] private GameObject commonSpawnVfx;
     [SerializeField, Tooltip("탱커유닛 소환 파티클")] private GameObject tankerSpawnVfx;
     [SerializeField, Tooltip("근접유닛 소환 파티클")] private GameObject meleeSpawnVfx;
     [SerializeField, Tooltip("원거리유닛 소환 파티클")] private GameObject RangeSpawnVfx;
+    
+    [Header("유닛 사망시 생성되는 오브젝트")]
     public GameObject AcensionPrefab;
 
     //반복호출 방지
@@ -54,9 +43,7 @@ public class GameManager : MonoBehaviour
     public int CurLevel;
     public float playeTime;
     [SerializeField] private Transform spawnPos;
-    [SerializeField]private float LaserCoolTime = 48;
-    [SerializeField]private float LaserCurTime = 0;
-    private bool isReloading = false; // 코루틴 실행 중인지 확인하는 변수
+    
     public GameObject GameSet;
     public CinemachineVirtualCamera mainCamera;
     public Vector3 StartCamPos = new Vector3(20, 1, -74.82741f);
@@ -77,14 +64,11 @@ public class GameManager : MonoBehaviour
     public float playerTowerMaxHp;
     public float playerTowerCurHp;
     private float playerCastleHpAmount { get { return playerTowerCurHp / playerTowerMaxHp; } }  //자주 계산되는 항목은 프로퍼티로 만들기
-    [Header("PlayerCastleUI")]
-    [SerializeField] private Image playerCastleHpBar;
 
     [Header("EnemyCastleData")]
     public float enemyTowerMaxHp;
     public float enemyTowerCurHp;
-    [Header("EnemyCastleUI")]
-    [SerializeField] private Image enemyCastleHpBar;
+
     private float enemyCastleHpAmount { get { return enemyTowerCurHp / enemyTowerMaxHp; } }  //자주 계산되는 항목은 프로퍼티로 만들기
 
     [Header("CostInfo")]
@@ -103,7 +87,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         LoadLevelData();
-        LaserCoolTime = 48;
         isReloadingDone = false;
         GameSet.SetActive(false);
 
@@ -140,10 +123,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //레이저 비활성화 상태인 경우 레이저 장전
-        if (isReloading == false)
-            StartCoroutine(ReloadingLaser());
-
         //체력 바 갱신
         CastleHpAmount();
 
@@ -174,8 +153,8 @@ public class GameManager : MonoBehaviour
     private void CastleHpAmount()
     {
         //체력 바 갱신
-        playerCastleHpBar.fillAmount = playerCastleHpAmount;
-        enemyCastleHpBar.fillAmount = enemyCastleHpAmount;
+        UiManager.Instance.playerCastleHpBar.fillAmount = playerCastleHpAmount;
+        UiManager.Instance.enemyCastleHpBar.fillAmount = enemyCastleHpAmount;
     }
     private void GameEndState()
     {
@@ -245,7 +224,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            LaserFire();
+            TowerLaserObj.LaserFire();
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -269,7 +248,6 @@ public class GameManager : MonoBehaviour
         isVictory = false;
         isDefeat = false;
         isReloadingDone = false;
-        isReloading = false;
         Time.timeScale = 1;
 
         playerTowerCurHp = playerTowerMaxHp;
@@ -278,38 +256,19 @@ public class GameManager : MonoBehaviour
         maxCost = 150;
         CurLevel = 0;
         playeTime = 0;
-        LaserCurTime = 0;
 
         //소환 버튼 초기화
         commUnitReady = true;
         tankerUnitReady = true;
         meleeUnitReady = true;
         rangeUnitReady = true;
-
         UiManager.Instance.ReloadingDoneParticle.Stop();
-    }
-    public IEnumerator ButtonCooltime(Button button, GameObject coolObj, Image coolTimeBar, float coolTime)
-    {
-        button.interactable = false; // 버튼 비활성화
-        coolObj.SetActive(true); // 쿨타임 오브젝트 활성화
-        float elapsedTime = 0f;
-
-        while (elapsedTime < coolTime)
-        {
-            elapsedTime += Time.deltaTime;
-            coolTimeBar.fillAmount = elapsedTime / coolTime; // 쿨타임 바 업데이트
-            yield return null; // 다음 프레임까지 대기
-        }
-
-        coolTimeBar.fillAmount = 0; // 쿨타임 바 초기화
-        button.interactable = true; // 버튼 재활성화
-        coolObj.SetActive(false); // 쿨타임 오브젝트 비활성화
     }
 
     //소환
     public void spawnCommonCat()
     {
-        if (curCost > playerUnits[0].UsedCost)
+        if (curCost > playerUnits[0].UsedCost && (!isVictory || !isDefeat))
         {
             //유닛 구매 효과음 재생
             AudioManager.Instance.PlayEffectSound(AudioManager.Instance.spawnUnitClip);
@@ -320,6 +279,7 @@ public class GameManager : MonoBehaviour
             commonCat.transform.SetPositionAndRotation(spawnPos.position, transform.rotation);  //위치, 회전값 넣어줘야함.
             commonCat.Unitinit(playerUnits[0]);
             commonCat.ResetUnit();
+
             //Sprite변경
             commonCat.GetComponentInChildren<SpriteRenderer>().sprite = playerUnits[0].UnitProjectile.GetComponentInChildren<SpriteRenderer>().sprite;
             //Animator변경
@@ -335,7 +295,7 @@ public class GameManager : MonoBehaviour
             Vector2 CommonVfxPos = new Vector2(commonCat.transform.position.x - 1f, commonCat.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(commonSpawnVfx, CommonVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
-            StartCoroutine(ButtonCooltime(UiManager.Instance.spawnCommonButton, commonCoolObj, commonCoolTimeBar, playerUnits[0].SpawnCoolTime));
+            StartCoroutine(UiManager.Instance.ButtonCooltime(UiManager.Instance.spawnCommonButton, UiManager.Instance.commonCoolObj, UiManager.Instance.commonCoolTimeBar, playerUnits[0].SpawnCoolTime));
             StartCoroutine(CommonUnitCooldown());
         }
         else
@@ -349,7 +309,7 @@ public class GameManager : MonoBehaviour
     }
     public void spawnTankerCat()
     {
-        if (curCost > playerUnits[1].UsedCost)
+        if (curCost > playerUnits[1].UsedCost && (!isVictory || !isDefeat))
         {
             //유닛 구매 효과음 재생
             AudioManager.Instance.PlayEffectSound(AudioManager.Instance.spawnUnitClip);
@@ -373,7 +333,7 @@ public class GameManager : MonoBehaviour
             Vector2 TankerVfxPos = new Vector2(tankerCat.transform.position.x - 1f, tankerCat.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(tankerSpawnVfx, TankerVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
-            StartCoroutine(ButtonCooltime(UiManager.Instance.spawnTankerButton,tankerCoolObj, tankerCoolTimeBar, playerUnits[1].SpawnCoolTime));
+            StartCoroutine(UiManager.Instance.ButtonCooltime(UiManager.Instance.spawnTankerButton, UiManager.Instance.tankerCoolObj, UiManager.Instance.tankerCoolTimeBar, playerUnits[1].SpawnCoolTime));
             StartCoroutine(TankerUnitCooldown());
         }
         else
@@ -387,7 +347,7 @@ public class GameManager : MonoBehaviour
     }
     public void spawnMeleeCat()
     {
-        if (curCost >= playerUnits[2].UsedCost)
+        if (curCost >= playerUnits[2].UsedCost && (!isVictory || !isDefeat))
         {
             //유닛 구매 효과음 재생
             AudioManager.Instance.PlayEffectSound(AudioManager.Instance.spawnUnitClip);
@@ -412,7 +372,7 @@ public class GameManager : MonoBehaviour
             Vector2 MeleeVfxPos = new Vector2(meleeUnit.transform.position.x - 1f, meleeUnit.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(meleeSpawnVfx, MeleeVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
-            StartCoroutine(ButtonCooltime(UiManager.Instance.spawnMeleeButton,meleeCoolObj, meleeCoolTimeBar, playerUnits[2].SpawnCoolTime));
+            StartCoroutine(UiManager.Instance.ButtonCooltime(UiManager.Instance.spawnMeleeButton,UiManager.Instance.meleeCoolObj, UiManager.Instance.meleeCoolTimeBar, playerUnits[2].SpawnCoolTime));
             StartCoroutine(MeleeUnitCooldown());
         }
         else
@@ -426,7 +386,7 @@ public class GameManager : MonoBehaviour
     }
     public void spawnRangeCat()
     {
-        if (curCost > playerUnits[3].UsedCost)
+        if (curCost > playerUnits[3].UsedCost && (!isVictory || !isDefeat))
         {
             //유닛 구매 효과음 재생
             AudioManager.Instance.PlayEffectSound(AudioManager.Instance.spawnUnitClip);
@@ -451,7 +411,7 @@ public class GameManager : MonoBehaviour
             Vector2 RangeVfxPos = new Vector2(rangeUnit.transform.position.x - 1f, rangeUnit.transform.position.y + 2f);
             GameObject newSpawnParticle = Instantiate(RangeSpawnVfx, RangeVfxPos, transform.rotation, null);
             Destroy(newSpawnParticle, 2f);
-            StartCoroutine(ButtonCooltime(UiManager.Instance.spawnRangeButton, rangeCoolObj, rangeCoolTimeBar, playerUnits[3].SpawnCoolTime));
+            StartCoroutine(UiManager.Instance.ButtonCooltime(UiManager.Instance.spawnRangeButton, UiManager.Instance.rangeCoolObj, UiManager.Instance.rangeCoolTimeBar, playerUnits[3].SpawnCoolTime));
             StartCoroutine(RangeUnitCooldown());
         }
         else
@@ -491,52 +451,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ReloadingLaser()
-    {
-        if (isReloading) yield break; // 이미 실행 중이면 종료
 
-        TowerReloadParticle.SetActive(true);
-        UiManager.Instance.RealodingParticle.Play();
-        isReloading = true; 
-        isReloadingDone = false; 
-        ReadyText.SetActive(false); 
-
-        while (LaserCurTime < LaserCoolTime)
-        {
-            LaserCurTime += Time.deltaTime;
-            ReloadingImage.fillAmount = LaserCurTime / LaserCoolTime; // 쿨타임 바 업데이트
-            yield return null; // 다음 프레임까지 대기
-        }
-
-        // 쿨타임 완료 후
-        isReloadingDone = true;
-        UiManager.Instance.RealodingParticle.Stop();
-        UiManager.Instance.ReloadingDoneParticle.Play();
-        TowerReloadParticle.SetActive(false);
-        ReadyText.SetActive(true);
-    }
-    public void LaserFire()
-    {
-        if(isReloadingDone == true)
-        {
-            //레이저 발사 효과음 재생
-            AudioManager.Instance.PlayEffectSound(AudioManager.Instance.FireLaserClip);
-            //발사
-            UiManager.Instance.ReloadingDoneParticle.Stop();
-            isReloading = false;
-            isReloadingDone = false;
-            LaserCurTime = 0;   //쿨타임 초기화
-            ReloadingImage.fillAmount = 0;
-            ReadyText.SetActive(false);
-            Debug.Log("레이저 발사!!");
-            TowerLaserObj.GetComponent<FireLaser>().StartCoroutine(TowerLaserObj.GetComponent<FireLaser>().ShootLaser());
-        }
-        else
-        {
-            LaserNotice.GetComponent<Animator>().SetTrigger("LaserNoticeOn");
-            Debug.Log("재장전이 되지 않아 발사에 실패했습니다.");
-        }
-    }
     public void SaveLevelData()
     {
         // 각 레벨의 클리어 여부를 저장

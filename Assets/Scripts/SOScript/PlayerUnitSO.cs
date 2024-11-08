@@ -5,10 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="PlayerUnit", menuName ="ScriptableObject/PlayerUnitData", order =0)]
 public class PlayerUnitSO : ScriptableObject
 {
-    public enum UnitType { Common, Tanker, Melee, Range }
 
     [Header("UnitData")]
-    public UnitType unitType;
+    public int unitId;
+
     public string UnitName;
     public int UsedCost;
     public float UnitDamage;

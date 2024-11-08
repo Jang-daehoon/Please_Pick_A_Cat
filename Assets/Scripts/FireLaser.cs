@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class FireLaser : MonoBehaviour
 {
+    [Header("LaserInfo")]
+    [SerializeField] private float LaserCoolTime = 48;
+    [SerializeField] private float LaserCurTime = 0;
+    private bool isReloading = false; // 코루틴 실행 중인지 확인하는 변수
+
     [SerializeField] private float defDistanceRay = 100f;
     public Transform laserFirePoint;
     public LineRenderer m_lineRenderer;
@@ -17,12 +22,16 @@ public class FireLaser : MonoBehaviour
     // 발사 각도 (도 단위)
     [SerializeField] private float angle = 60f;
 
+
     // 폭발 범위의 콜라이더
     private BoxCollider2D explosionCollider;
     private Animator animator;
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+
+        LaserCoolTime = 48;
+
         // 라인의 굵기 설정
         m_lineRenderer.startWidth = 0.1f;
         m_lineRenderer.endWidth = 0.1f;
@@ -32,10 +41,40 @@ public class FireLaser : MonoBehaviour
         // 폭발 콜라이더 가져오기
         explosionCollider = ExplosionPos.GetComponent<BoxCollider2D>();
     }
-
+    private void OnEnable()
+    {
+        isReloading = false;
+        LaserCurTime = 0;
+    }
     private void Update()
     {
-        //ShootLaser();
+        //레이저 비활성화 상태인 경우 레이저 장전
+        if (isReloading == false)
+            StartCoroutine(ReloadingLaser());
+    }
+    private IEnumerator ReloadingLaser()
+    {
+        if (isReloading) yield break; // 이미 실행 중이면 종료
+
+        UiManager.Instance.TowerReloadParticle.SetActive(true);
+        UiManager.Instance.RealodingParticle.Play();
+        isReloading = true;
+        GameManager.Instance.isReloadingDone = false;
+        UiManager.Instance.ReadyText.SetActive(false);
+
+        while (LaserCurTime < LaserCoolTime)
+        {
+            LaserCurTime += Time.deltaTime;
+            UiManager.Instance.ReloadingImage.fillAmount = LaserCurTime / LaserCoolTime; // 쿨타임 바 업데이트
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        // 쿨타임 완료 후
+        GameManager.Instance.isReloadingDone = true;
+        UiManager.Instance.RealodingParticle.Stop();
+        UiManager.Instance.ReloadingDoneParticle.Play();
+        UiManager.Instance.TowerReloadParticle.SetActive(false);
+        UiManager.Instance.ReadyText.SetActive(true);
     }
 
     public IEnumerator ShootLaser()
@@ -61,6 +100,28 @@ public class FireLaser : MonoBehaviour
         else
         {
             Draw2DRay(laserFirePoint.position, laserFirePoint.position + (-laserFirePoint.transform.right * defDistanceRay)); // 왼쪽 끝점
+        }
+    }
+    public void LaserFire()
+    {
+        if (GameManager.Instance.isReloadingDone == true)
+        {
+            //레이저 발사 효과음 재생
+            AudioManager.Instance.PlayEffectSound(AudioManager.Instance.FireLaserClip);
+            //발사
+            UiManager.Instance.ReloadingDoneParticle.Stop();
+            isReloading = false;
+            GameManager.Instance.isReloadingDone = false;
+            LaserCurTime = 0;   //쿨타임 초기화
+            UiManager.Instance.ReloadingImage.fillAmount = 0;
+            UiManager.Instance.ReadyText.SetActive(false);
+            Debug.Log("레이저 발사!!");
+            StartCoroutine(ShootLaser());
+        }
+        else
+        {
+            UiManager.Instance.LaserNotice.GetComponent<Animator>().SetTrigger("LaserNoticeOn");
+            Debug.Log("재장전이 되지 않아 발사에 실패했습니다.");
         }
     }
 
