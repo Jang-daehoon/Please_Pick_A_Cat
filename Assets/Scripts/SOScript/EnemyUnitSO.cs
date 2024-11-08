@@ -5,8 +5,6 @@ using UnityEngine;
 public class EnemyUnitSO : ScriptableObject
 {
     [Header("UnitData")]
-    public int unitId;
-
     public string unitName;
     public float unitDamage;
     public float maxHp;

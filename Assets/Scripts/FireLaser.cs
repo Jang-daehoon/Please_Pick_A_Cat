@@ -14,6 +14,7 @@ public class FireLaser : MonoBehaviour
     public LineRenderer m_lineRenderer;
     public Transform ExplosionPos;
 
+    public GameObject TowerReloadParticle;
     public GameObject ExplosionParticle;
 
     // 레이저가 충돌할 레이어
@@ -56,7 +57,7 @@ public class FireLaser : MonoBehaviour
     {
         if (isReloading) yield break; // 이미 실행 중이면 종료
 
-        UiManager.Instance.TowerReloadParticle.SetActive(true);
+        TowerReloadParticle.SetActive(true);
         UiManager.Instance.RealodingParticle.Play();
         isReloading = true;
         GameManager.Instance.isReloadingDone = false;
@@ -73,7 +74,7 @@ public class FireLaser : MonoBehaviour
         GameManager.Instance.isReloadingDone = true;
         UiManager.Instance.RealodingParticle.Stop();
         UiManager.Instance.ReloadingDoneParticle.Play();
-        UiManager.Instance.TowerReloadParticle.SetActive(false);
+        TowerReloadParticle.SetActive(false);
         UiManager.Instance.ReadyText.SetActive(true);
     }
 

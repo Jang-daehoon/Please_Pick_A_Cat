@@ -86,7 +86,6 @@ public class UiManager : MonoBehaviour
     public Button laserFireBtn;
     public Image ReloadingImage;
     public GameObject ReadyText;
-    public GameObject TowerReloadParticle;
     public GameObject LaserNotice;
     [Header("Mute Button States")]
     public bool isBgmMute = false;

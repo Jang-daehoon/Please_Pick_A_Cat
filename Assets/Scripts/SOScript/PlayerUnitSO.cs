@@ -7,8 +7,6 @@ public class PlayerUnitSO : ScriptableObject
 {
 
     [Header("UnitData")]
-    public int unitId;
-
     public string UnitName;
     public int UsedCost;
     public float UnitDamage;

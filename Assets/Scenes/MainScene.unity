@@ -1195,9 +1195,9 @@ RectTransform:
   - {fileID: 334214905}
   m_Father: {fileID: 161732504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 61.25, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &68080015
@@ -2231,9 +2231,9 @@ RectTransform:
   - {fileID: 1339293361}
   m_Father: {fileID: 161732504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 878.75, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &204095985
@@ -4524,7 +4524,6 @@ MonoBehaviour:
   laserFireBtn: {fileID: 361457143}
   ReloadingImage: {fileID: 781483207}
   ReadyText: {fileID: 1542418152}
-  TowerReloadParticle: {fileID: 1010581205}
   LaserNotice: {fileID: 696156826}
   isBgmMute: 0
   isEffectClipMute: 0
@@ -4712,7 +4711,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &443351026
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4867,9 +4866,9 @@ RectTransform:
   - {fileID: 2072187366}
   m_Father: {fileID: 161732504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 333.75, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &453186832
@@ -9527,11 +9526,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 993965810}
   m_CullTransparentMesh: 1
---- !u!1 &1010581205 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1311366462316954, guid: 506a06125115f2f49b5ee51567bae10c, type: 3}
-  m_PrefabInstance: {fileID: 1972474947}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1033203951
 GameObject:
   m_ObjectHideFlags: 0
@@ -10876,6 +10870,7 @@ MonoBehaviour:
   laserFirePoint: {fileID: 332237033}
   m_lineRenderer: {fileID: 1502797423}
   ExplosionPos: {fileID: 1291709504}
+  TowerReloadParticle: {fileID: 1494891866}
   ExplosionParticle: {fileID: 6345534951453029199, guid: 19d96b7d347f0f746a11f6ca236a7d1e, type: 3}
   platformLayer:
     serializedVersion: 2
@@ -12714,6 +12709,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4200883865063198, guid: 1eb29fd5f7a8920409dcd8cec44ecb6c, type: 3}
   m_PrefabInstance: {fileID: 1494891864}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1494891866 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1397402549733478, guid: 1eb29fd5f7a8920409dcd8cec44ecb6c, type: 3}
+  m_PrefabInstance: {fileID: 1494891864}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1502797421
 GameObject:
   m_ObjectHideFlags: 0
@@ -14259,9 +14259,9 @@ RectTransform:
   - {fileID: 511945388}
   m_Father: {fileID: 161732504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 606.25, y: -150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1647204581
